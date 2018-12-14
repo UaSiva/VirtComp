@@ -1,0 +1,382 @@
+SQL> SELECT * FROM EMPLOYEE
+  2  WHERE LNAME IN ('Jones','James');
+
+FNAME           MINIT LNAME           SSN       BDATE                           
+--------------- ----- --------------- --------- ---------                       
+ADDRESS                        S     SALARY SUPER_SSN        DNO                
+------------------------------ - ---------- --------- ----------                
+Jared           D     James           111111100 10-OCT-66                       
+123 Peachtr,Atlanta,GA         M      85000                    6                
+                                                                                
+John            C     James           555555500 30-JUN-75                       
+766 Bloomington,Sacramento,CA  M      81000                    8                
+                                                                                
+Jon             C     Jones           111111101 14-NOV-67                       
+111 Allgood,Atlanta,GA         M      45000 111111100          6                
+                                                                                
+
+FNAME           MINIT LNAME           SSN       BDATE                           
+--------------- ----- --------------- --------- ---------                       
+ADDRESS                        S     SALARY SUPER_SSN        DNO                
+------------------------------ - ---------- --------- ----------                
+Megan           G     Jones           254937381 02-MAR-61                       
+528 Stone CT,Chicago,IL        F      62000 666666600          8                
+                                                                                
+
+SQL> SELECT * FROM EMPLOYEE
+  2  WHERE FNAME IN ('Kim','Wilson');
+
+FNAME           MINIT LNAME           SSN       BDATE                           
+--------------- ----- --------------- --------- ---------                       
+ADDRESS                        S     SALARY SUPER_SSN        DNO                
+------------------------------ - ---------- --------- ----------                
+Kim             C     Grace           333333300 23-OCT-70                       
+667 Mills Ave,Sacramento,CA    F      79000                    6                
+                                                                                
+Kim             G     Ted             444222666 15-APR-68                       
+3648 Tree Cir,Austin,TX        M      50000 999999999          8                
+                                                                                
+Wilson          A     Holmes          242916639 02-JUN-71                       
+21 South Co,Arlington,TX       M      72500 555555500          4                
+                                                                                
+
+SQL> SELECT A.FNAME,A.LNAME, A.SSN , COUNT(B.HOURS) AS CNT
+  2  FROM EMPLOYEE A, WORKS_ON B
+  3  WHERE A.SSN=B.ESSN
+  4  GROUP BY A.SSN,A.FNAME,A.LNAME
+  5  HAVING COUNT(B.PNO)>1;
+
+FNAME           LNAME           SSN              CNT                            
+--------------- --------------- --------- ----------                            
+Cameron         Thirteen        111422203          2                            
+John            Smith           123456789          2                            
+Wilson          Holmes          242916639          3                            
+Red             Bacher          666666613          3                            
+Percy           Liang           398172999          2                            
+Jennifer        Wallace         987654321          2                            
+Alicia          Zelaya          999887777          2                            
+Frank           Wong            333445555          3                            
+Ahmad           Jabbar          987987987          2                            
+Richard         Koelbel         214370999          2                            
+Erin            Maxfield        242535609          2                            
+
+FNAME           LNAME           SSN              CNT                            
+--------------- --------------- --------- ----------                            
+Jake            Sheen           245239264          3                            
+Roy             Lewallen        999999999         13                            
+Leonard         Moody           349273344          2                            
+Joyce           English         453453453          2                            
+
+15 rows selected.
+
+SQL> SELECT A.PNAME, A.PNUMBER , A.PLOCATION, COUNT(B.ESSN) AS CNT
+  2  FROM PROJECT A , WORKS_ON B
+  3  WHERE A.PNUMBER=B.PNO
+  4  GROUP BY A.PNUMBER, A.PNAME, A.PLOCATION;
+
+PNAME                             PNUMBER PLOCATION                             
+------------------------------ ---------- ------------------------------        
+       CNT                                                                      
+----------                                                                      
+Advertizing                            70 Arlington                             
+         4                                                                      
+                                                                                
+MotherBoard                            29 Milwaukee                             
+         3                                                                      
+                                                                                
+Benefits                               30 Stafford                              
+         4                                                                      
+                                                                                
+
+PNAME                             PNUMBER PLOCATION                             
+------------------------------ ---------- ------------------------------        
+       CNT                                                                      
+----------                                                                      
+DataMining                             13 Sacramento                            
+         1                                                                      
+                                                                                
+EntityAnnot                             4 Houston                               
+         3                                                                      
+                                                                                
+InkjetPrinters                         91 Milwaukee                             
+        10                                                                      
+                                                                                
+
+PNAME                             PNUMBER PLOCATION                             
+------------------------------ ---------- ------------------------------        
+       CNT                                                                      
+----------                                                                      
+EventManagement                         6 Sacramento                            
+         5                                                                      
+                                                                                
+Analysis                                5 Sacramento                            
+         6                                                                      
+                                                                                
+Computerization                        10 Stafford                              
+         6                                                                      
+                                                                                
+
+PNAME                             PNUMBER PLOCATION                             
+------------------------------ ---------- ------------------------------        
+       CNT                                                                      
+----------                                                                      
+FoodDistribution                        7 Sacramento                            
+         5                                                                      
+                                                                                
+LaserPrinters                          92 Milwaukee                             
+         5                                                                      
+                                                                                
+HumanResource                          95 Arlington                             
+         4                                                                      
+                                                                                
+
+PNAME                             PNUMBER PLOCATION                             
+------------------------------ ---------- ------------------------------        
+       CNT                                                                      
+----------                                                                      
+DatabaseSystems                        62 Atlanta                               
+        11                                                                      
+                                                                                
+Middleware                             63 Atlanta                               
+         9                                                                      
+                                                                                
+SearchEngine                           22 Arlington                             
+         2                                                                      
+                                                                                
+
+PNAME                             PNUMBER PLOCATION                             
+------------------------------ ---------- ------------------------------        
+       CNT                                                                      
+----------                                                                      
+OperatingSystem                        61 Sacramento                            
+        11                                                                      
+                                                                                
+ConfigMgmt                             11 Atlanta                               
+         3                                                                      
+                                                                                
+Reorganization                         20 Houston                               
+         4                                                                      
+                                                                                
+
+18 rows selected.
+
+SQL> SELECT A.SSN,A.FNAME,A.LNAME,C.PNUMBER,C.PNAME,D.HOURS
+  2  FROM EMPLOYEE A ,DEPT_LOCATIONS B ,PROJECT C , WORKS_ON D
+  3  WHERE A.DNO=B.DNUMBER
+  4  AND B.DNUMBER=5
+  5  AND D.ESSN=A.SSN
+  6  AND C.PNUMBER=D.PNO AND B.DLOCATION='Houston';
+
+SSN       FNAME           LNAME              PNUMBER                            
+--------- --------------- --------------- ----------                            
+PNAME                               HOURS                                       
+------------------------------ ----------                                       
+636669233 Michael         Morgan                   4                            
+EntityAnnot                            11                                       
+                                                                                
+453453453 Joyce           English                  5                            
+Analysis                               20                                       
+                                                                                
+123456789 John            Smith                    5                            
+Analysis                             32.5                                       
+                                                                                
+
+SSN       FNAME           LNAME              PNUMBER                            
+--------- --------------- --------------- ----------                            
+PNAME                               HOURS                                       
+------------------------------ ----------                                       
+453453453 Joyce           English                  6                            
+EventManagement                        20                                       
+                                                                                
+123456789 John            Smith                    6                            
+EventManagement                       7.5                                       
+                                                                                
+333445555 Frank           Wong                     7                            
+FoodDistribution                       10                                       
+                                                                                
+
+SSN       FNAME           LNAME              PNUMBER                            
+--------- --------------- --------------- ----------                            
+PNAME                               HOURS                                       
+------------------------------ ----------                                       
+666884444 Ramesh          Narayan                  7                            
+FoodDistribution                       40                                       
+                                                                                
+333445555 Frank           Wong                    10                            
+Computerization                        10                                       
+                                                                                
+888665555 siva            avis                    20                            
+Reorganization                          5                                       
+                                                                                
+
+SSN       FNAME           LNAME              PNUMBER                            
+--------- --------------- --------------- ----------                            
+PNAME                               HOURS                                       
+------------------------------ ----------                                       
+333445555 Frank           Wong                    20                            
+Reorganization                         10                                       
+                                                                                
+906218888 James           Miller                  29                            
+MotherBoard                            15                                       
+                                                                                
+
+11 rows selected.
+
+SQL> SELECT A.LNAME,A.FNAME,SUM(B.HOURS) AS TOTAL
+  2  FROM EMPLOYEE A , WORKS_ON B ,PROJECT C
+  3  WHERE C.PNUMBER=B.PNO
+  4  AND   B.ESSN=A.SSN
+  5  GROUP BY A.LNAME,A.FNAME
+  6  HAVING SUM(B.HOURS)>40;
+
+LNAME           FNAME                TOTAL                                      
+--------------- --------------- ----------                                      
+Sheen           Jake                    55                                      
+Zell            Josh                    48                                      
+Ball            Nandita                 44                                      
+Bacher          Red                     50                                      
+Thirteen        Cameron                 50                                      
+Chase           Jeff                    46                                      
+
+6 rows selected.
+
+SQL> SELECT B.FNAME,B.LNAME,COUNT(A.SSN) AS CNT
+  2  FROM EMPLOYEE A, EMPLOYEE B
+  3  WHERE A.SUPER_SSN=B.SSN
+  4  GROUP BY B.FNAME,B.LNAME;
+
+FNAME           LNAME                  CNT                                      
+--------------- --------------- ----------                                      
+Ahmad           Jabbar                   1                                      
+Carl            Reedy                    1                                      
+siva            avis                     3                                      
+John            James                    3                                      
+Kim             Grace                    1                                      
+Alec            Best                     1                                      
+Naveen          Drew                     1                                      
+Red             Bacher                   2                                      
+Evan            Wallis                   3                                      
+Nandita         Ball                     2                                      
+Bob             Bender                   4                                      
+
+FNAME           LNAME                  CNT                                      
+--------------- --------------- ----------                                      
+Lyle            Leslie                   2                                      
+Billie          King                     1                                      
+John            Ed                       1                                      
+Juan            Linda                    2                                      
+Frank           Wong                     3                                      
+Josh            Zell                     2                                      
+Kate            King                     3                                      
+Jennifer        Wallace                  2                                      
+Alex            Freed                    7                                      
+Jill            Jarvis                   1                                      
+Roy             Lewallen                 4                                      
+
+FNAME           LNAME                  CNT                                      
+--------------- --------------- ----------                                      
+Jared           James                    4                                      
+John            Smith                    1                                      
+Bonnie          Bays                     1                                      
+Sam             Snedden                  1                                      
+Gerald          Small                    1                                      
+Sammy           Hall                     2                                      
+
+28 rows selected.
+
+SQL> SELECT SUM(A.HOURS)*7 AS TOTAL,A.PNO
+  2  FROM WORKS_ON A , EMPLOYEE B
+  3  WHERE B.SSN=A.ESSN
+  4  GROUP BY A.PNO;
+
+     TOTAL        PNO                                                           
+---------- ----------                                                           
+       413         30                                                           
+      2324         91                                                           
+       238         22                                                           
+     311.5          6                                                           
+       455         11                                                           
+       280         29                                                           
+       126         13                                                           
+       238         20                                                           
+       504         70                                                           
+       707         95                                                           
+     619.5          5                                                           
+
+     TOTAL        PNO                                                           
+---------- ----------                                                           
+       427          4                                                           
+      2506         61                                                           
+      1750         63                                                           
+       518          7                                                           
+       833         10                                                           
+      2429         62                                                           
+      1106         92                                                           
+
+18 rows selected.
+
+SQL> SELECT A.SSN,A.FNAME,A.LNAME,COUNT(B.ESSN) AS CNT
+  2  FROM EMPLOYEE A ,DEPENDENT B
+  3  WHERE B.ESSN=A.SSN
+  4  GROUP BY A.SSN,A.FNAME,A.LNAME
+  5  HAVING COUNT(B.ESSN)>2;
+
+SSN       FNAME           LNAME                  CNT                            
+--------- --------------- --------------- ----------                            
+666666608 Arnold          Head                     3                            
+444444401 Bonnie          Bays                     3                            
+
+SQL> SELECT A.SSN,COUNT(B.ESSN) AS CNT
+  2  FROM EMPLOYEE A ,DEPENDENT B
+  3  WHERE A.SSN=B.ESSN AND B.RELATIONSHIP='Children'
+  4  GROUP BY A.SSN
+  5  HAVING COUNT(B.ESSN)>1;
+
+SSN              CNT                                                            
+--------- ----------                                                            
+444444401          2                                                            
+666666608          2                                                            
+
+SQL> SELECT A.SSN,A.LNAME,A.FNAME
+  2  FROM EMPLOYEE A , DEPT_LOCATIONS B , DEPARTMENT C
+  3  WHERE A.DNO=C.DNUMBER
+  4  AND   B.DNUMBER=C.DNUMBER
+  5  AND B.DLOCATION='Atlanta';
+
+SSN       LNAME           FNAME                                                 
+--------- --------------- ---------------                                       
+111111100 James           Jared                                                 
+111111101 Jones           Jon                                                   
+111111102 Mark            Justin                                                
+111111103 Knight          Brad                                                  
+333333300 Grace           Kim                                                   
+333333301 Chase           Jeff                                                  
+555555501 Ball            Nandita                                               
+222333444 Ed              John                                                  
+343434344 Barbara         Jose                                                  
+673466642 Wolowitz        Penny                                                 
+202843824 Hall            Debra                                                 
+
+SSN       LNAME           FNAME                                                 
+--------- --------------- ---------------                                       
+245239264 Sheen           Jake                                                  
+432765098 Burklow         Cindy                                                 
+913353347 Geller          Zach                                                  
+001614905 Yu              Alex                                                  
+241625699 Hisel           Christina                                             
+
+16 rows selected.
+
+SQL> SELECT A.DNUMBER,A.DNAME,COUNT(C.PNUMBER) AS CNT
+  2  FROM DEPARTMENT A , DEPT_LOCATIONS B , PROJECT C
+  3  WHERE C.DNUM=A.DNUMBER
+  4  AND   A.DNUMBER=B.DNUMBER
+  5  AND B.DLOCATION='Houston'
+  6  GROUP BY A.DNUMBER, A.DNAME;
+
+   DNUMBER DNAME                  CNT                                           
+---------- --------------- ----------                                           
+         5 Research                 1                                           
+         1 Headquarters             1                                           
+
+SQL> spool off
